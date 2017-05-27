@@ -1,0 +1,22 @@
+{
+  "name": "eng-hack-youtube",
+  "version": "1.0.0",
+  "description": "Takes unstructured comments from videos and aggregates into product reviews",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeffLangballe/EngHackTensor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JeffLangballe/EngHackTensor/issues"
+  },
+  "homepage": "https://github.com/JeffLangballe/EngHackTensor#readme",
+  "dependencies": {
+    "angular": "^1.6.4"
+  }
+}
