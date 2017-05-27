@@ -92,9 +92,9 @@ def score_calculator(keyword):
     totalScore=0
     compound_score = 0
     idList = get_video_ids(keyword)
-    print(idList)
+    #print(idList)
     numIDs = len(idList)
-    print(numIDs)
+    #print(numIDs)
     for vidID in idList:
         comments = comment_collector(vidID)
        # print(comments)
@@ -111,7 +111,6 @@ def score_calculator(keyword):
             
     totalScore /= (numIDs * 1.0)
     print('Average score')
-    print(totalScore)
     return totalScore
 
 if __name__ == '__main__':
