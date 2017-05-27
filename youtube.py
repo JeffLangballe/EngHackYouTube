@@ -75,9 +75,15 @@ def get_video_ids(keyword, page_token=None):
     return videoIDs
 
 if __name__ == '__main__':
+    commentAggregate = []
     video_id = sys.argv[1]
     comments, next_page = get_comments(video_id)
     print(comments)
-    while next_page is not None:
+    while next_page is not None and len(commentAggregate) < 100:
         comments, next_page = get_comments(video_id, next_page)
+        commentAggregate = commentAggregate + comments
         print(comments)
+    print len(commentAggregate) + 'comments collected' 
+
+        
+        
