@@ -16,7 +16,7 @@ BASE_URL = 'https://www.googleapis.com/youtube/v3/commentThreads'
 def get_comments(video_id, page_token=None):
     """
     Returns tuple of the form (comments, next_page_token) for a video_id
-    If the last page is reached, page_token is None
+    If the last page is reached, next_page_token is None
     """
 
     # Make API request and parse as JSON
