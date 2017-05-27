@@ -9,6 +9,7 @@ python youtube_comments.py <video_id>
 import sys
 import requests
 from api.keys import youtube_api_key
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
 BASE_URL_COMMENTS = 'https://www.googleapis.com/youtube/v3/commentThreads'
@@ -55,7 +56,7 @@ def get_video_ids(keyword, page_token=None):
     # Make API request and parse as JSON
     payload = {}
     payload['part'] = 'snippet'
-    payload['maxResults'] = 25
+    payload['maxResults'] = 20
     payload['q'] = keyword
     payload['type'] = 'video'
     payload['key'] = youtube_api_key
@@ -83,11 +84,37 @@ def comment_collector(video_id):
         commentAggregate = commentAggregate + comments
     return commentAggregate
 
+def score_calculator(keyword):
+    analyzer = SentimentIntensityAnalyzer()
+    totalScore=0
+    compound_score = 0
+    idList = get_video_ids(keyword)
+    print(idList)
+    numIDs = len(idList)
+    print(numIDs)
+    for vidID in idList:
+        comments = comment_collector(vidID)
+       # print(comments)
+        for comment in comments:
+            if comment is not None:
+                vs = analyzer.polarity_scores(comment)
+                #print("{:-<65} {}".format(comment, str(vs)))
+                compound_score += vs['compound']
+        try:
+            compound_score /= len(comments)
+        except ZeroDivisionError:
+            compount_score = compound_score
+        totalScore += compound_score
+            
+    totalScore /= (numIDs * 1.0)
+    print('Average score')
+    print(totalScore)
+    return totalScore
+
 if __name__ == '__main__':
     keyword = sys.argv[1]
-    idList = get_video_ids(keyword)
-    for vidID in idList:
-        comment_collector(vidID)
+    score_calculator(keyword)
+    
 
 
         
