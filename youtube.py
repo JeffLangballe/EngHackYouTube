@@ -75,16 +75,20 @@ def get_video_ids(keyword, page_token=None):
     return videoIDs
 
 
-def comment_collector(video_id)
+def comment_collector(video_id):
     commentAggregate = []
-    video_id = sys.argv[1]
     comments, next_page = get_comments(video_id)
-    print(comments)
     while next_page is not None and len(commentAggregate) < 100:
         comments, next_page = get_comments(video_id, next_page)
         commentAggregate = commentAggregate + comments
-    print(len(commentAggregate), 'comments collected')
     return commentAggregate
+
+if __name__ == '__main__':
+    keyword = sys.argv[1]
+    idList = get_video_ids(keyword)
+    for vidID in idList:
+        comment_collector(vidID)
+
 
         
         
