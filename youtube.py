@@ -11,7 +11,8 @@ import requests
 from api.keys import youtube_api_key
 
 
-BASE_URL = 'https://www.googleapis.com/youtube/v3/commentThreads'
+BASE_URL_COMMENTS = 'https://www.googleapis.com/youtube/v3/commentThreads'
+BASE_URL_VIDEO_IDS = 'https://www.googleapis.com/youtube/v3/search'
 
 def get_comments(video_id, page_token=None):
     """
@@ -28,7 +29,7 @@ def get_comments(video_id, page_token=None):
     if page_token:
         payload['pageToken'] = page_token
 
-    r = requests.get(BASE_URL, params=payload)
+    r = requests.get(BASE_URL_COMMENTS, params=payload)
     data = r.json()
     
     # Extract comment text
@@ -44,6 +45,34 @@ def get_comments(video_id, page_token=None):
         next_page_token = data['nextPageToken']
         
     return comments, next_page_token
+
+def get_video_ids(keyword, page_token=None):
+    """
+    Returns tuple of the form (comments, next_page_token) for a video_id
+    If the last page is reached, next_page_token is None
+    """
+
+    # Make API request and parse as JSON
+    payload = {}
+    payload['part'] = 'snippet'
+    payload['maxResults'] = 25
+    payload['q'] = keyword
+    payload['type'] = 'video'
+    payload['key'] = youtube_api_key
+    if page_token:
+        payload['pageToken'] = page_token
+
+    r = requests.get(BASE_URL_VIDEO_IDS, params=payload)
+    data = r.json()
+    
+    # Extract videoids text
+    videoIDs = [
+        item['id']['videoId']
+        for item in data['items']
+        if item is not None
+    ]
+  
+    return videoIDs
 
 if __name__ == '__main__':
     commentAggregate = []
