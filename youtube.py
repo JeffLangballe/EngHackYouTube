@@ -50,6 +50,6 @@ if __name__ == '__main__':
     video_id = sys.argv[1]
     comments, next_page = get_comments(video_id)
     print(comments)
-    while next_page is not None:
+    while next_page is not None and len(comments) < 101:
         comments, next_page = get_comments(video_id, next_page)
         print(comments)
