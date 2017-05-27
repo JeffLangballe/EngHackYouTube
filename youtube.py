@@ -33,6 +33,9 @@ def get_comments(video_id, page_token=None):
     r = requests.get(BASE_URL_COMMENTS, params=payload)
     data = r.json()
     
+    if 'items' not in data:
+        return [], None
+
     # Extract comment text
     comments = [
         item['snippet']['topLevelComment']['snippet']['textOriginal']
