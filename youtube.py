@@ -54,7 +54,7 @@ if __name__ == '__main__':
         comments, next_page = get_comments(video_id, next_page)
         commentAggregate = commentAggregate + comments
         print(comments)
-    print len(commentAggregate) + 'comments collected' 
+    print(len(commentAggregate), 'comments collected')
 
         
         

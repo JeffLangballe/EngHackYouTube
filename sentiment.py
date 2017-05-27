@@ -10,7 +10,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
     #from vaderSentiment import SentimentIntensityAnalyzer
 
 # --- examples -------
-sentences = ["VADER is smart, handsome, and funny.",      # positive sentence example
+examples = ["VADER is smart, handsome, and funny.",      # positive sentence example
             "VADER is not smart, handsome, nor funny.",   # negation sentence example
             "VADER is smart, handsome, and funny!",       # punctuation emphasis handled correctly (sentiment intensity adjusted)
             "VADER is very smart, handsome, and funny.",  # booster words handled correctly (sentiment intensity adjusted)
@@ -30,28 +30,20 @@ if __name__ == '__main__':
     analyzer = SentimentIntensityAnalyzer()
     video_id = sys.argv[1]
 
-    scores = {}
-    scores['neg'] = 0
-    scores['neu'] = 0
-    scores['pos'] = 0
-    scores['compound'] = 0
+    compound_score = 0
 
-    comments, next_id = youtube.get_comments(video_id)
+    #comments, next_id = youtube.get_comments(video_id)
+    comments = [
+        'Size doesn\'t matter',
+        'What the fuck did you just fucking say about me you little bitch?',
+        'delet this',
+    ]
     for comment in comments:
         vs = analyzer.polarity_scores(comment)
         print("{:-<65} {}".format(comment, str(vs)))
-        scores['neg'] += vs['neg']
-        scores['neu'] += vs['neu']
-        scores['pos'] += vs['pos']
-        scores['compound'] += vs['compound']
+        compound_score += vs['compound']
 
-    print('Total values')
-    print(str(scores))
-
-    scores['neg'] /= len(comments)
-    scores['neu'] /= len(comments)
-    scores['pos'] /= len(comments)
-    scores['compound'] /= len(comments)
+    compound_score /= len(comments)
     
-    print('Average values')
-    print(str(scores))
+    print('Average score')
+    print(compound_score)
