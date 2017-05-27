@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Uses YouTube API to fetch comments
+
+Usage:
+python youtube_comments.py <video_id>
 """
 
 import sys
@@ -10,11 +13,10 @@ from api.keys import youtube_api_key
 
 BASE_URL = 'https://www.googleapis.com/youtube/v3/commentThreads'
 
-def get_comments(video_id):
+def get_comments(video_id, page_token=None):
     """
-    Returns list of comments for video_id
-    Only returns first page. ie. first 20 comments
-    TODO: Get all the comments and do stuff
+    Returns tuple of the form (comments, next_page_token) for a video_id
+    If the last page is reached, page_token is None
     """
 
     # Make API request and parse as JSON
@@ -23,10 +25,12 @@ def get_comments(video_id):
     payload['textFormat'] = 'plainText'
     payload['videoId'] = video_id
     payload['key'] = youtube_api_key
+    if page_token:
+        payload['pageToken'] = page_token
 
     r = requests.get(BASE_URL, params=payload)
     data = r.json()
-
+    
     # Extract comment text
     comments = [
         item['snippet']['topLevelComment']['snippet']['textOriginal']
@@ -34,10 +38,18 @@ def get_comments(video_id):
         if item is not None
     ]
 
-    return comments
+    # Get token for the next page
+    next_page_token = None
+    if 'nextPageToken' in data:
+        next_page_token = data['nextPageToken']
+        
+    return comments, next_page_token
 
 
 if __name__ == '__main__':
     video_id = sys.argv[1]
-    comments = get_comments(video_id)
+    comments, next_page = get_comments(video_id)
     print(comments)
+    while next_page is not None:
+        comments, next_page = get_comments(video_id, next_page)
+        print(comments)
