@@ -1,15 +1,7 @@
 # EngHackYouTube
 Takes unstructured comments from videos and aggregates into product reviews
 
-"YOPR" Score?
+Integrates YouTube API with VADER sentiment analysis to determine general opinion on keyword searches
 
-Notes:
-rake keyword 'scraper'
-sentiment analysis to analize the keywords for stuff
-
-power reviews (third party review platform)
-aggregates reviews
-
-discuss other platforms
-
-take unstructured comments from videos and turn them into product reviews
+Usage:
+`python youtube.py <keyword>`
